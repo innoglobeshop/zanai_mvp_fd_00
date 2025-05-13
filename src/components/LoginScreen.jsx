@@ -1,9 +1,9 @@
 // src/components/LoginScreen.jsx
 import React, { useState } from 'react';
 
-// We'll pass a function `onLoginSuccess` as a prop later
-// This function will be called when the login is successful,
-// providing the token and chat history to the App component.
+// !!! IMPORTANT: REPLACE WITH YOUR ACTUAL LIVE RAILWAY BACKEND URL !!!
+const API_BASE_URL = 'https://your-railway-backend-url.up.railway.app'; // e.g., https://zanai-api.up.railway.app
+
 function LoginScreen({ onLoginSuccess }) {
   const [pin, setPin] = useState('');
   const [error, setError] = useState('');
@@ -11,10 +11,9 @@ function LoginScreen({ onLoginSuccess }) {
 
   const handlePinChange = (e) => {
     const value = e.target.value;
-    // Allow only digits and limit to 6 characters
     if (/^\d*$/.test(value) && value.length <= 6) {
       setPin(value);
-      setError(''); // Clear error when user types
+      setError('');
     }
   };
 
@@ -29,11 +28,7 @@ function LoginScreen({ onLoginSuccess }) {
     setError('');
 
     try {
-      // IMPORTANT: Replace with your actual backend URL if it's different
-      // For development, if your backend runs on port 3001 and frontend on 5173,
-      // you'll need to configure Vite proxy or use the full URL.
-      // Let's use the full URL for now for clarity.
-      const response = await fetch('http://localhost:3001/api/auth/login', {
+      const response = await fetch(`${API_BASE_URL}/api/auth/login`, { // Using the hardcoded URL
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -44,15 +39,12 @@ function LoginScreen({ onLoginSuccess }) {
       const data = await response.json();
 
       if (!response.ok) {
-        // data.msg should contain the error message from the backend (e.g., "Invalid PIN.")
         setError(data.msg || 'Login failed. Please try again.');
         setIsLoading(false);
         return;
       }
 
-      // Login successful
       console.log('Login successful:', data);
-      // Call the onLoginSuccess prop with the token and history
       if (onLoginSuccess) {
         onLoginSuccess(data.token, data.history);
       }
@@ -73,13 +65,13 @@ function LoginScreen({ onLoginSuccess }) {
         
         <form onSubmit={handleSubmit}>
           <input
-            type="password" // Use "password" to mask input, or "text" with "tel" pattern for numeric keyboard
-            inputMode="numeric" // Helps bring up numeric keyboard on mobile
-            pattern="[0-9]*"    // Further helps with numeric input
+            type="password"
+            inputMode="numeric"
+            pattern="[0-9]*"
             maxLength="6"
             value={pin}
             onChange={handlePinChange}
-            className="w-full px-4 py-3 mb-4 text-lg text-center border-2 border-gray-300 rounded-md focus:ring-2 focus:ring-deep-blue focus:border-transparent outline-none tracking-[0.5em]" // Added tracking for spacing
+            className="w-full px-4 py-3 mb-4 text-lg text-center border-2 border-gray-300 rounded-md focus:ring-2 focus:ring-deep-blue focus:border-transparent outline-none tracking-[0.5em]"
             placeholder="------"
             disabled={isLoading}
           />
