@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 
 // !!! IMPORTANT: REPLACE WITH YOUR ACTUAL LIVE RAILWAY BACKEND URL !!!
-const API_BASE_URL = 'https://your-railway-backend-url.up.railway.app'; // e.g., https://zanai-api.up.railway.app
+const API_BASE_URL = 'https://zanaimvpbd00-production.up.railway.app'; // e.g., https://zanai-api.up.railway.app
 
 function LoginScreen({ onLoginSuccess }) {
   const [pin, setPin] = useState('');
